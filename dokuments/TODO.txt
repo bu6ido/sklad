@@ -1,0 +1,7 @@
+//1. Vuv view-to s ma6inite - button 'Export to Excel' ili 'Print' na tablicata s ma6inite
+   Kolonki "fabri4en nomer", "inv. nomer" da gi ima, no po default skriti.
+   Da izlizat iv export-a/print-a, ako sa pokazani
+//2. V dialog-a "Add/Edit Machine" - buton 'Print'
+//3. V spravkata 'Izrazhodvani materiali i trud' - da se dobavqt "tip na ma6ina" i "fabri4en nomer" - po default skriti
+   Da izlizat i v export-a, ako sa pokazani
+

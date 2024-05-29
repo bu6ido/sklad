@@ -1,0 +1,51 @@
+[2015-09-01 21:12:59] local.ERROR: exception 'InvalidArgumentException' with message 'Command "clean" is not defined.' in /home/bu6ido/dev/PHP/sklad/vendor/symfony/console/Symfony/Component/Console/Application.php:549
+Stack trace:
+#0 /home/bu6ido/dev/PHP/sklad/vendor/symfony/console/Symfony/Component/Console/Command/HelpCommand.php(76): Symfony\Component\Console\Application->find('clean')
+#1 /home/bu6ido/dev/PHP/sklad/vendor/symfony/console/Symfony/Component/Console/Command/Command.php(253): Symfony\Component\Console\Command\HelpCommand->execute(Object(Symfony\Component\Console\Input\ArgvInput), Object(Symfony\Component\Console\Output\ConsoleOutput))
+#2 /home/bu6ido/dev/PHP/sklad/vendor/symfony/console/Symfony/Component/Console/Application.php(874): Symfony\Component\Console\Command\Command->run(Object(Symfony\Component\Console\Input\ArgvInput), Object(Symfony\Component\Console\Output\ConsoleOutput))
+#3 /home/bu6ido/dev/PHP/sklad/vendor/symfony/console/Symfony/Component/Console/Application.php(195): Symfony\Component\Console\Application->doRunCommand(Object(Symfony\Component\Console\Command\HelpCommand), Object(Symfony\Component\Console\Input\ArgvInput), Object(Symfony\Component\Console\Output\ConsoleOutput))
+#4 /home/bu6ido/dev/PHP/sklad/vendor/symfony/console/Symfony/Component/Console/Application.php(126): Symfony\Component\Console\Application->doRun(Object(Symfony\Component\Console\Input\ArgvInput), Object(Symfony\Component\Console\Output\ConsoleOutput))
+#5 /home/bu6ido/dev/PHP/sklad/vendor/laravel/framework/src/Illuminate/Foundation/Console/Kernel.php(90): Symfony\Component\Console\Application->run(Object(Symfony\Component\Console\Input\ArgvInput), Object(Symfony\Component\Console\Output\ConsoleOutput))
+#6 /home/bu6ido/dev/PHP/sklad/artisan(36): Illuminate\Foundation\Console\Kernel->handle(Object(Symfony\Component\Console\Input\ArgvInput), Object(Symfony\Component\Console\Output\ConsoleOutput))
+#7 {main}  
+[2015-09-01 21:14:45] local.ERROR: exception 'PDOException' with message 'SQLSTATE[42S02]: Base table or view not found: 1146 Table 'sklad.password_resets' doesn't exist' in /home/bu6ido/dev/PHP/sklad/vendor/laravel/framework/src/Illuminate/Database/Connection.php:378
+Stack trace:
+#0 /home/bu6ido/dev/PHP/sklad/vendor/laravel/framework/src/Illuminate/Database/Connection.php(378): PDO->prepare('delete from `pa...')
+#1 /home/bu6ido/dev/PHP/sklad/vendor/laravel/framework/src/Illuminate/Database/Connection.php(612): Illuminate\Database\Connection->Illuminate\Database\{closure}(Object(Illuminate\Database\MySqlConnection), 'delete from `pa...', Array)
+#2 /home/bu6ido/dev/PHP/sklad/vendor/laravel/framework/src/Illuminate/Database/Connection.php(576): Illuminate\Database\Connection->runQueryCallback('delete from `pa...', Array, Object(Closure))
+#3 /home/bu6ido/dev/PHP/sklad/vendor/laravel/framework/src/Illuminate/Database/Connection.php(383): Illuminate\Database\Connection->run('delete from `pa...', Array, Object(Closure))
+#4 /home/bu6ido/dev/PHP/sklad/vendor/laravel/framework/src/Illuminate/Database/Connection.php(340): Illuminate\Database\Connection->affectingStatement('delete from `pa...', Array)
+#5 /home/bu6ido/dev/PHP/sklad/vendor/laravel/framework/src/Illuminate/Database/Query/Builder.php(1785): Illuminate\Database\Connection->delete('delete from `pa...', Array)
+#6 /home/bu6ido/dev/PHP/sklad/vendor/laravel/framework/src/Illuminate/Auth/Passwords/DatabaseTokenRepository.php(158): Illuminate\Database\Query\Builder->delete()
+#7 /home/bu6ido/dev/PHP/sklad/vendor/laravel/framework/src/Illuminate/Auth/Console/ClearResetsCommand.php(28): Illuminate\Auth\Passwords\DatabaseTokenRepository->deleteExpired()
+#8 [internal function]: Illuminate\Auth\Console\ClearResetsCommand->fire()
+#9 /home/bu6ido/dev/PHP/sklad/vendor/laravel/framework/src/Illuminate/Container/Container.php(523): call_user_func_array(Array, Array)
+#10 /home/bu6ido/dev/PHP/sklad/vendor/laravel/framework/src/Illuminate/Console/Command.php(115): Illuminate\Container\Container->call(Array)
+#11 /home/bu6ido/dev/PHP/sklad/vendor/symfony/console/Symfony/Component/Console/Command/Command.php(253): Illuminate\Console\Command->execute(Object(Symfony\Component\Console\Input\ArgvInput), Object(Symfony\Component\Console\Output\ConsoleOutput))
+#12 /home/bu6ido/dev/PHP/sklad/vendor/laravel/framework/src/Illuminate/Console/Command.php(101): Symfony\Component\Console\Command\Command->run(Object(Symfony\Component\Console\Input\ArgvInput), Object(Symfony\Component\Console\Output\ConsoleOutput))
+#13 /home/bu6ido/dev/PHP/sklad/vendor/symfony/console/Symfony/Component/Console/Application.php(874): Illuminate\Console\Command->run(Object(Symfony\Component\Console\Input\ArgvInput), Object(Symfony\Component\Console\Output\ConsoleOutput))
+#14 /home/bu6ido/dev/PHP/sklad/vendor/symfony/console/Symfony/Component/Console/Application.php(195): Symfony\Component\Console\Application->doRunCommand(Object(Illuminate\Auth\Console\ClearResetsCommand), Object(Symfony\Component\Console\Input\ArgvInput), Object(Symfony\Component\Console\Output\ConsoleOutput))
+#15 /home/bu6ido/dev/PHP/sklad/vendor/symfony/console/Symfony/Component/Console/Application.php(126): Symfony\Component\Console\Application->doRun(Object(Symfony\Component\Console\Input\ArgvInput), Object(Symfony\Component\Console\Output\ConsoleOutput))
+#16 /home/bu6ido/dev/PHP/sklad/vendor/laravel/framework/src/Illuminate/Foundation/Console/Kernel.php(90): Symfony\Component\Console\Application->run(Object(Symfony\Component\Console\Input\ArgvInput), Object(Symfony\Component\Console\Output\ConsoleOutput))
+#17 /home/bu6ido/dev/PHP/sklad/artisan(36): Illuminate\Foundation\Console\Kernel->handle(Object(Symfony\Component\Console\Input\ArgvInput), Object(Symfony\Component\Console\Output\ConsoleOutput))
+#18 {main}
+
+Next exception 'Illuminate\Database\QueryException' with message 'SQLSTATE[42S02]: Base table or view not found: 1146 Table 'sklad.password_resets' doesn't exist (SQL: delete from `password_resets` where `created_at` < 2015-09-01 20:14:45)' in /home/bu6ido/dev/PHP/sklad/vendor/laravel/framework/src/Illuminate/Database/Connection.php:620
+Stack trace:
+#0 /home/bu6ido/dev/PHP/sklad/vendor/laravel/framework/src/Illuminate/Database/Connection.php(576): Illuminate\Database\Connection->runQueryCallback('delete from `pa...', Array, Object(Closure))
+#1 /home/bu6ido/dev/PHP/sklad/vendor/laravel/framework/src/Illuminate/Database/Connection.php(383): Illuminate\Database\Connection->run('delete from `pa...', Array, Object(Closure))
+#2 /home/bu6ido/dev/PHP/sklad/vendor/laravel/framework/src/Illuminate/Database/Connection.php(340): Illuminate\Database\Connection->affectingStatement('delete from `pa...', Array)
+#3 /home/bu6ido/dev/PHP/sklad/vendor/laravel/framework/src/Illuminate/Database/Query/Builder.php(1785): Illuminate\Database\Connection->delete('delete from `pa...', Array)
+#4 /home/bu6ido/dev/PHP/sklad/vendor/laravel/framework/src/Illuminate/Auth/Passwords/DatabaseTokenRepository.php(158): Illuminate\Database\Query\Builder->delete()
+#5 /home/bu6ido/dev/PHP/sklad/vendor/laravel/framework/src/Illuminate/Auth/Console/ClearResetsCommand.php(28): Illuminate\Auth\Passwords\DatabaseTokenRepository->deleteExpired()
+#6 [internal function]: Illuminate\Auth\Console\ClearResetsCommand->fire()
+#7 /home/bu6ido/dev/PHP/sklad/vendor/laravel/framework/src/Illuminate/Container/Container.php(523): call_user_func_array(Array, Array)
+#8 /home/bu6ido/dev/PHP/sklad/vendor/laravel/framework/src/Illuminate/Console/Command.php(115): Illuminate\Container\Container->call(Array)
+#9 /home/bu6ido/dev/PHP/sklad/vendor/symfony/console/Symfony/Component/Console/Command/Command.php(253): Illuminate\Console\Command->execute(Object(Symfony\Component\Console\Input\ArgvInput), Object(Symfony\Component\Console\Output\ConsoleOutput))
+#10 /home/bu6ido/dev/PHP/sklad/vendor/laravel/framework/src/Illuminate/Console/Command.php(101): Symfony\Component\Console\Command\Command->run(Object(Symfony\Component\Console\Input\ArgvInput), Object(Symfony\Component\Console\Output\ConsoleOutput))
+#11 /home/bu6ido/dev/PHP/sklad/vendor/symfony/console/Symfony/Component/Console/Application.php(874): Illuminate\Console\Command->run(Object(Symfony\Component\Console\Input\ArgvInput), Object(Symfony\Component\Console\Output\ConsoleOutput))
+#12 /home/bu6ido/dev/PHP/sklad/vendor/symfony/console/Symfony/Component/Console/Application.php(195): Symfony\Component\Console\Application->doRunCommand(Object(Illuminate\Auth\Console\ClearResetsCommand), Object(Symfony\Component\Console\Input\ArgvInput), Object(Symfony\Component\Console\Output\ConsoleOutput))
+#13 /home/bu6ido/dev/PHP/sklad/vendor/symfony/console/Symfony/Component/Console/Application.php(126): Symfony\Component\Console\Application->doRun(Object(Symfony\Component\Console\Input\ArgvInput), Object(Symfony\Component\Console\Output\ConsoleOutput))
+#14 /home/bu6ido/dev/PHP/sklad/vendor/laravel/framework/src/Illuminate/Foundation/Console/Kernel.php(90): Symfony\Component\Console\Application->run(Object(Symfony\Component\Console\Input\ArgvInput), Object(Symfony\Component\Console\Output\ConsoleOutput))
+#15 /home/bu6ido/dev/PHP/sklad/artisan(36): Illuminate\Foundation\Console\Kernel->handle(Object(Symfony\Component\Console\Input\ArgvInput), Object(Symfony\Component\Console\Output\ConsoleOutput))
+#16 {main}  

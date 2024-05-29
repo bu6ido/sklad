@@ -1,0 +1,663 @@
+@extends('column2')
+
+@section('title_section') Машини @endsection
+
+@section('left_section')
+<div class="panel panel-primary">
+  <div class="panel-heading">
+    <h3 class="panel-title">Навигация</h3>
+  </div>
+  <div class="panel-body">
+
+<ul class="nav nav-pills nav-stacked text-left">
+  <li role="navigation">
+    <ul class="nav nav-pills">
+      <li role="navigation"><a href="/"><b>Начало</b></a></li>
+    </ul>
+  </li>
+
+  <li role="navigation">
+    <ul class="nav nav-pills">
+      <li role="navigation"><a href="#" data-toggle="collapse" data-target="#nomenMenu"><b>Номенклатури</b> <span class="caret"></span></a></li>
+    </ul>
+    <ul id="nomenMenu" class="nav nav-pills nav-stacked in">
+      <li role="navigation"><a href="/settings">&nbsp;Общи настройки</a></li>
+      <li role="navigation"><a href="/lines">&nbsp;Линии(бригади)</a></li>
+      <li role="navigation" class="active"><a href="/machines">&nbsp;Машини</a></li>
+      <li role="navigation"><a href="/groups">&nbsp;Групи</a></li>
+      <li role="navigation"><a href="/materials">&nbsp;Материали</a></li>
+    </ul>
+  </li>
+
+  <li role="navigation">
+    <ul class="nav nav-pills">
+      <li role="navigation"><a href="#" data-toggle="collapse" data-target="#actionsMenu"><b>Операции</b> <span class="caret"></span></a></li>
+    </ul>
+    <ul id="actionsMenu" class="nav nav-pills nav-stacked in">
+      <li role="navigation"><a href="/deliveries">&nbsp;Доставки</a></li>
+      <li role="navigation"><a href="/machine-work">&nbsp;Работа с машини</a></li>
+    </ul>
+  </li>
+
+  <li role="navigation">
+    <ul class="nav nav-pills">
+      <li role="navigation"><a href="#" data-toggle="collapse" data-target="#reportsMenu"><b>Отчети</b> <span class="caret"></span></a></li>
+    </ul>
+    <ul id="reportsMenu" class="nav nav-pills nav-stacked in">
+      <li role="navigation"><a href="/report-delivered">&nbsp;Доставени материали</a></li>
+      <li role="navigation"><a href="/report-work">&nbsp;Изразходвани материали и труд</a></li>
+      <li role="navigation"><a href="/report-available">&nbsp;Налични материали</a></li>
+    </ul>
+  </li>
+</ul>
+
+  </div>
+</div>
+@endsection
+
+@section('main_section')
+<div class="panel panel-primary">
+  <div class="panel-heading">
+    <h1 class="panel-title page-header">Машини</h1>
+  </div>
+  <div class="panel-body">
+
+<form id="formSearchMachines" method="get" class="form-inline">
+  <div class="form-group">
+    <label class="control-label">Линия:</label>
+    <select class="form-control" name="lineId"></select>
+    <label class="control-label">Системен №:</label>
+    <input type="text" class="form-control" name="systemNumber" />
+    <button type="submit" class="btn btn-primary">Търси</button>      
+  </div>
+</form>
+
+<div class="table-responsive">
+<table id="tblMachines" class="table table-condensed table-hover table-striped">
+  <thead>
+  <tr>
+    <th data-column-id="systemNumber" data-converter="numeric">№</th>
+    <th data-column-id="model">Модел</th>
+    <th data-column-id="machineType">Тип</th>
+    <th data-column-id="lineName">Линия</th>
+    <th data-column-id="fabricNumber" data-visible="false">Фабричен №</th>
+    <th data-column-id="invNumber" data-visible="false">Инвентарен №</th>
+    <th data-column-id="actions" data-formatter="actions" data-searchable="false" 
+	data-sortable="false">Actions</th>
+  </tr>
+  </thead>
+  <tbody>
+  </tbody>
+</table>
+</div>
+
+<button id="btnCreateMachine" type="button" class="btn btn-primary">
+  Добави нова машина
+</button>
+
+<button id="btnExportMachines" type="button" class="btn btn-primary">
+  Експорт към Excel
+</button>
+
+  </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="dlgMachine" tabindex="-1" role="dialog" aria-labelledby="lblTitleMachine" aria-hidden="true"
+	data-backdrop="static" data-keyboard="false">
+<form id="formDlgMachine" method="post">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button id="btnXMachine" type="button" class="close" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="lblTitleMachine">Добави/редактирай машина:</h4>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <input type="hidden" class="form-control" name="machineId" />
+          <label class="control-label">Системен номер:</label>
+          <input type="number" class="form-control" name="systemNumber" required step="1" data-error="Системният номер е задължителен и трябва да бъде цяло число !!!"/>
+	  <div class="help-block with-errors"></div>
+        </div>
+        <div class="form-group">
+          <label class="control-label">Модел:</label>
+          <input type="text" class="form-control" name="model" required data-error="Моделът на машината е задължителен !!!" />
+	  <div class="help-block with-errors"></div>
+        </div>
+        <div class="form-group">
+          <label class="control-label">Тип:</label>
+          <input type="text" class="form-control" name="machineType" required data-error="Типът на машината е задължителен !!!" />
+	  <div class="help-block with-errors"></div>
+        </div>
+        <div class="form-group">
+          <label class="control-label">Линия:</label>
+          <input type="hidden" name="lineId" />
+	  <div class="input-group">
+	    <input type="text" class="form-control" name="lineName" onfocus="blur();" 
+		   required data-error="Моля изберете линия !!!" />
+	    <span class="input-group-btn">
+	      <button id="btnChooseLine" type="button" class="btn btn-primary"
+		data-toggle="tooltip" title="Изберете линия">...</button>
+            </span>
+	  </div>
+	  <div class="help-block with-errors"></div>
+        </div>
+        <div class="form-group">
+          <label class="control-label">Фабричен номер:</label>
+          <input type="text" class="form-control" name="fabricNumber" required data-error="Фабричният номер е задължителен !!!" />
+	  <div class="help-block with-errors"></div>
+        </div>
+        <div class="form-group">
+          <label class="control-label">Инв. номер:</label>
+          <input type="text" class="form-control" name="invNumber" />
+        </div>
+        <div class="form-group">
+          <label class="control-label">Дата на закупуване:</label>
+          <input type="text" class="form-control" name="dateBuy" 
+		 required pattern="^\d{4}-\d{1,2}-\d{1,2}$" data-error="Датата на закупуване е задължителна и в съответния формат !!!" />
+	  <div class="help-block with-errors"></div>
+        </div>
+        <div class="form-group">
+          <label class="control-label">Цена:</label>
+          <input type="number" class="form-control" name="price" step="any" required data-error="Цената е задължителна и трябва да бъде число !!!" />
+	  <div class="help-block with-errors"></div>
+        </div>
+      </div>
+      <div class="modal-footer">
+	<button id="btnPrintMachine" type="button" class="btn btn-primary">Принтирай</button>
+        <button id="btnSaveMachine" type="submit" data-toggle="modal" class="btn btn-primary btn-default">Запиши</button>
+        <button id="btnCancelMachine" type="button" class="btn">Откажи</button>
+      </div>
+    </div>
+  </div>
+</form>
+</div>
+
+
+<div class="modal fade" id="dlgLines" tabindex="-1" role="dialog" aria-labelledby="lblTitleLines" aria-hidden="true"
+	data-backdrop="static" data-keyboard="false">
+<!-- form id="formDlgLines" method="post" -->
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button id="btnXLines" type="button" class="close" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="lblTitleLines">Избери линия:</h4>
+      </div>
+      <div class="modal-body">
+
+<div class="table-responsive">
+<form id="formSearchLines" method="get" class="form-inline">
+  <div class="form-group">
+    <label class="control-label">Име на линия:</label>
+    <input type="text" class="form-control" name="lineName" />
+    <button type="submit" class="btn btn-primary">Търси</button>      
+  </div>
+</form>
+
+<table id="tblLines" class="table table-condensed table-hover table-striped">
+  <thead>
+  <tr>
+    <th data-column-id="id" data-converter="numeric">№</th>
+    <th data-column-id="lineName">Име на линия</th>
+    <th data-column-id="actions" data-formatter="actions" data-searchable="false" 
+	data-sortable="false">Actions</th>
+  </tr>
+  </thead>
+  <tbody>
+  </tbody>
+</table>
+</div>
+
+<button id="btnCreateLine" type="button" class="btn btn-primary">
+  Добави нова линия
+</button>
+
+      </div>
+    </div>
+  </div>
+<!-- /form -->
+</div>
+
+<div class="modal fade" id="dlgLine" tabindex="-1" role="dialog" aria-labelledby="lblTitleLine" aria-hidden="true"
+	data-backdrop="static" data-keyboard="false">
+<form id="formDlgLine" method="post">
+  <div class="modal-dialog modal-sm">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button id="btnXLine" type="button" class="close" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="lblTitleLine">Добави/редактирай линия:</h4>
+      </div>
+      <div class="modal-body">
+	<div class="form-group">
+          <input type="hidden" class="form-control" name="lineId" />
+          <label class="control-label">Име на линия:</label>
+          <input type="text" class="form-control" name="lineName" required data-error="Името на линия е задължително !!!"/>
+	  <div class="help-block with-errors"></div>
+	</div>
+      </div>
+      <div class="modal-footer">
+        <button id="btnSaveLine" type="submit" data-toggle="modal" class="btn btn-primary btn-default">Запиши</button>
+        <button id="btnCancelLine" type="button" class="btn">Откажи</button>
+      </div>
+    </div>
+  </div>
+</form>
+</div>
+
+
+
+<script type="text/javascript">
+// ------------- MACHINES -----------------
+function machines_initTbl()
+{
+  rest_ajax_get('/lines/find', function(data) {
+    var cmbLines = $('#formSearchMachines select[name="lineId"]');
+    cmbLines.empty();
+    cmbLines.append('<option value="">Избери линия</option>');
+    if (data && (data.length > 0))
+    {
+      for (var i=0; i<data.length; i++)
+      {
+        var line = data[i];
+        cmbLines.append('<option value="' + line.id + '">' + line.lineName + '</option>');
+      }
+    }
+  });
+
+  $('#formSearchMachines').submit(function() {
+    machines_refreshTbl();
+    return false;
+  });
+
+  var tbl = $('#tblMachines').bootgrid({
+    ajax: true,
+    ajaxSettings: {
+      method: 'GET',
+      cache: false
+    },
+    templates: {
+      search: ""
+    },
+    requestHandler: function (request) {
+      request.lineId = $('#formSearchMachines select[name="lineId"]').val();
+      request.systemNumber = $('#formSearchMachines input[name="systemNumber"]').val();
+      return request;
+    },
+    url: "/machines/findgrid",
+    caseSensitive: false,
+    formatters: {
+      'actions' : function(column, row)
+        {
+          return "<button type='button' class='btn btn-primary btn-edit' data-row-id='" + row.id + "'>Редактирай</button> " +
+                 "<button type='button' class='btn btn-primary btn-delete' data-row-id='" + row.id + "'>Изтрий</button>";
+        }
+    }
+  }).on('loaded.rs.jquery.bootgrid', function() {
+    tbl.find('.btn-edit').on('click', function(e) {
+      var rowId = $(this).data("row-id");
+      machines_findById(rowId, function(machine) {
+        machines_setDlg(machine);
+        $('#dlgMachine').modal('show');
+      });
+    });
+    tbl.find('.btn-delete').on('click', function(e) {
+      var rowId = $(this).data("row-id");
+      machines_findById(rowId, function(machine) {
+        if (machine)
+        {
+          bootbox.confirm('Сигурни ли сте, че искате да изтриете машина: <b>' + machine.model + '</b> ? ' +
+		'Съответните работи с машини и изразходваните количества също ще бъдат изтрити. Желаете ли да направите това ?', 
+            function(ok) { 
+              if (ok) {
+                machines_delete(machine, function(data) { machines_refreshTbl(); });
+              }
+          });
+        }
+      });
+    });
+  });
+}
+
+function machines_refreshTbl()
+{
+  $('#tblMachines').bootgrid('reload');
+}
+
+function machines_findById(id, callback)
+{
+  rest_ajax_get('/machines/' + id, callback);
+}
+
+function machines_initBtnCreate()
+{
+  $('#btnCreateMachine').click(function (e) { 
+    var machine = {};
+    machines_setDlg(machine);
+    $('#dlgMachine').modal('show'); 
+  });
+}
+
+function machines_initBtnExport()
+{
+  $('#btnExportMachines').click(function() {
+    var url = '/machines/export?';
+    var tbl = $('#tblMachines').data('.rs.jquery.bootgrid');
+    var request = {
+      rowCount: tbl.rowCount,
+      current: tbl.current,
+      sort: tbl.sortDictionary,
+
+      lineId: $('#formSearchMachines select[name="lineId"]').val(),
+      systemNumber: $('#formSearchMachines input[name="systemNumber"]').val()
+    };
+    var queryString = $.param(request);
+    url += queryString;
+
+    window.location = url;
+  });
+}
+
+function machines_initDlg()
+{
+  var funcHide = function (e) { $('#dlgMachine').modal('hide'); };
+  $('#btnXMachine').on('click', funcHide);
+  $('#btnCancelMachine').on('click', funcHide);
+  $('#btnPrintMachine').on('click', function() {
+    $('#dlgMachine .modal-body').print();
+  });
+  $('#formDlgMachine').validator({ disable: false }).submit(function(e) {
+    if (!e.isDefaultPrevented())
+    {
+      machines_save();
+    }
+    return false;
+  });
+  $('#dlgMachine').on('shown.bs.modal', function() {
+    $('#dlgMachine input[name="systemNumber"]').focus();
+  });
+  $('#dlgMachine #btnChooseLine').on('click', function() {
+    lines_select = function(line)
+    {
+      $('#dlgMachine input[name="lineId"]').val(line.id);
+      $('#dlgMachine input[name="lineName"]').val(line.lineName);
+    };
+    lines_deselect = function()
+    {
+      $('#dlgMachine input[name="lineId"]').val('');
+      $('#dlgMachine input[name="lineName"]').val('');
+    };
+    $('#dlgLines').modal('show');
+  });
+  $('#dlgMachine input[name="dateBuy"]').datepicker({
+    format: "yyyy-mm-dd",
+    language: "bg",
+    autoclose: true
+  });
+}
+
+function machines_setDlg(machine)
+{
+  if (machine)
+  {
+    $('#dlgMachine input[name="machineId"]').val(machine.id);
+    $('#dlgMachine input[name="systemNumber"]').val(machine.systemNumber);
+    $('#dlgMachine input[name="model"]').val(machine.model);
+    $('#dlgMachine input[name="machineType"]').val(machine.machineType);
+    $('#dlgMachine input[name="lineId"]').val(machine.lineId);
+    $('#dlgMachine input[name="fabricNumber"]').val(machine.fabricNumber);
+    $('#dlgMachine input[name="invNumber"]').val(machine.invNumber);
+    $('#dlgMachine input[name="dateBuy"]').val(machine.dateBuyStr);
+    $('#dlgMachine input[name="price"]').val(machine.price);
+    $('#dlgMachine input[name="lineName"]').val(machine.lineName);
+  }
+}
+
+function machines_getDlg()
+{
+  var obj = { };
+  obj.id = $('#dlgMachine input[name="machineId"]').val();
+  obj.systemNumber = $('#dlgMachine input[name="systemNumber"]').val();
+  obj.model = $('#dlgMachine input[name="model"]').val();
+  obj.machineType = $('#dlgMachine input[name="machineType"]').val();
+  obj.lineId = $('#dlgMachine input[name="lineId"]').val();
+  obj.fabricNumber = $('#dlgMachine input[name="fabricNumber"]').val();
+  obj.invNumber = $('#dlgMachine input[name="invNumber"]').val();
+  obj.dateBuy = $('#dlgMachine input[name="dateBuy"]').val();
+  obj.price = $('#dlgMachine input[name="price"]').val();
+  obj.lineName = $('#dlgMachine input[name="lineName"]').val();
+
+  return obj;
+}
+
+function machines_save()
+{
+  var machine = machines_getDlg();
+  $('#dlgMachine').modal('hide');
+  if (!machine.id)
+  {
+    machines_insert(machine, function(data) { machines_refreshTbl(); });
+  }
+  else
+  {
+    machines_update(machine, function(data) { machines_refreshTbl(); });
+  }
+}
+
+function machines_insert(machine, callback)
+{
+  if (!machine)
+    return;
+  machine._token = '{{ csrf_token() }}';
+  rest_ajax_submit_object('/machines', 'post', machine, callback);
+}
+
+function machines_update(machine, callback)
+{
+  if (!machine)
+    return;
+  if (!machine.id)
+    return;
+  machine._token = '{{ csrf_token() }}';
+  rest_ajax_submit_object('/machines/' + machine.id, 'put', machine, callback);
+}
+
+function machines_delete(machine, callback)
+{
+  if (!machine)
+    return;
+  if (!machine.id)
+    return;
+  machine._token = '{{ csrf_token() }}';
+  rest_ajax_submit_object('/machines/' + machine.id, 'delete', machine, callback);
+}
+// --------- END OF MACHINES --------------
+
+// -------------- LINES -------------------
+var lines_select, lines_deselect;
+
+function lines_initTbl()
+{
+  $('#formSearchLines').submit(function() {
+    lines_refreshTbl();
+    return false;
+  });
+
+  var tbl = $('#tblLines').bootgrid({
+    ajax: true,
+    ajaxSettings: {
+      method: 'GET',
+      cache: false
+    },
+    templates: {
+      search: ""
+    },
+    requestHandler: function (request) {
+      request.lineName = $('#formSearchLines input[name="lineName"]').val();
+      return request;
+    },
+    url: "/lines/findgrid",
+    caseSensitive: false,
+    formatters: {
+      'actions' : function(column, row)
+        {
+          return "<button type='button' class='btn btn-primary btn-choose-line' data-row-id='" + row.id + "'>Избери</button> " +
+		 "<button type='button' class='btn btn-primary btn-edit' data-row-id='" + row.id + "'>Редактирай</button> " +
+                 "<button type='button' class='btn btn-primary btn-delete' data-row-id='" + row.id + "'>Изтрий</button>";
+        }
+    }
+  }).on('loaded.rs.jquery.bootgrid', function() {
+    tbl.find('.btn-choose-line').on('click', function(e) {
+      var rowId = $(this).data("row-id");
+      lines_findById(rowId, function(line) {
+	if (lines_select)
+	{
+	  lines_select(line);
+	};
+        $('#dlgLines').modal('hide');
+      });
+    });
+    tbl.find('.btn-edit').on('click', function(e) {
+      var rowId = $(this).data("row-id");
+      lines_findById(rowId, function(line) {
+        lines_setDlg(line);
+        $('#dlgLine').modal('show');
+      });
+    });
+    tbl.find('.btn-delete').on('click', function(e) {
+      var rowId = $(this).data("row-id");
+      lines_findById(rowId, function(line) {
+        if (line)
+        {
+          bootbox.confirm('Сигурни ли сте, че искате да изтриете линия: <b>' + line.lineName + '</b> ? ' +
+		'Съответните машини, работа с тях, както и изразходваните количества също ще бъдат изтрити. ' +
+		'Желаете ли да направите това ?', 
+            function(ok) { 
+              if (ok) {
+                lines_delete(line, function(data) { lines_refreshTbl(); });
+              }
+          });
+        }
+      });
+    });
+  });
+  $('#btnXLines').on('click', function() {
+    if (lines_deselect)
+    {
+      lines_deselect();
+    };
+    $('#dlgLines').modal('hide');
+  });
+}
+
+function lines_refreshTbl()
+{
+  $('#tblLines').bootgrid('reload');
+}
+
+function lines_findById(id, callback)
+{
+  rest_ajax_get('/lines/' + id, callback);
+}
+
+function lines_initBtnCreate()
+{
+  $('#btnCreateLine').click(function (e) { 
+    var line = {};
+    lines_setDlg(line);
+    $('#dlgLine').modal('show'); 
+  });
+}
+
+function lines_initDlg()
+{
+  var funcHide = function (e) { $('#dlgLine').modal('hide'); };
+  $('#btnXLine').on('click', funcHide);
+  $('#btnCancelLine').on('click', funcHide);
+  $('#formDlgLine').validator({ disable: false }).submit(function(e) {
+    if (!e.isDefaultPrevented())
+    {
+      lines_save();
+    }
+    return false;
+  });
+  $('#dlgLine').on('shown.bs.modal', function() {
+    $('#dlgLine input[name="lineName"]').focus();
+  });
+}
+
+function lines_setDlg(line)
+{
+  if (line)
+  {
+    $('#dlgLine input[name="lineId"]').val(line.id);
+    $('#dlgLine input[name="lineName"]').val(line.lineName);
+  }
+}
+
+function lines_getDlg()
+{
+  var obj = { id : '', lineName : '' };
+  obj.id = $('#dlgLine input[name="lineId"]').val();
+  obj.lineName = $('#dlgLine input[name="lineName"]').val();
+  return obj;
+}
+
+function lines_save()
+{
+  var line = lines_getDlg();
+  $('#dlgLine').modal('hide');
+  if (!line.id)
+  {
+    lines_insert(line, function(data) { lines_refreshTbl(); });
+  }
+  else
+  {
+    lines_update(line, function(data) { lines_refreshTbl(); });
+  }
+}
+
+function lines_insert(line, callback)
+{
+  if (!line)
+    return;
+  line._token = '{{ csrf_token() }}';
+  rest_ajax_submit_object('/lines', 'post', line, callback);
+}
+
+function lines_update(line, callback)
+{
+  if (!line)
+    return;
+  if (!line.id)
+    return;
+  line._token = '{{ csrf_token() }}';
+  rest_ajax_submit_object('/lines/' + line.id, 'put', line, callback);
+}
+
+function lines_delete(line, callback)
+{
+  if (!line)
+    return;
+  if (!line.id)
+    return;
+  line._token = '{{ csrf_token() }}';
+  rest_ajax_submit_object('/lines/' + line.id, 'delete', line, callback);
+}
+// ---------- END OF LINES ----------------
+
+$(document).ready(function() {
+  machines_initTbl();
+  machines_initBtnCreate();
+  machines_initBtnExport();
+  machines_initDlg();
+
+  lines_initTbl();
+  lines_initBtnCreate();
+  lines_initDlg();
+
+  fixModalScrollBars();
+  initToolTips();
+});
+</script>
+@endsection
+
