@@ -339,7 +339,12 @@ function machines_initBtnExport()
 {
   $('#btnExportMachines').click(function() {
     var url = '/machines/export?';
+    var tbl = $('#tblMachines').data('.rs.jquery.bootgrid');
     var request = {
+      rowCount: tbl.rowCount,
+      current: tbl.current,
+      sort: tbl.sortDictionary,
+
       lineId: $('#formSearchMachines select[name="lineId"]').val(),
       systemNumber: $('#formSearchMachines input[name="systemNumber"]').val()
     };
