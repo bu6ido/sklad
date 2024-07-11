@@ -1,3 +1,6 @@
+CREATE DATABASE IF NOT EXISTS `my_database` DEFAULT CHARSET='utf8';
+USE `my_database`;
+
 -- MySQL dump 10.15  Distrib 10.0.21-MariaDB, for Linux (i686)
 --
 -- Host: localhost    Database: sklad
